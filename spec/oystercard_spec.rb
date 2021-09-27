@@ -1,6 +1,7 @@
 require './lib/oystercard'
 
 describe Oystercard do
+  let(:card_limit) { Oystercard::CARD_LIMIT }
   
   it 'gives a new oystercard with a balance of 0' do
     expect(subject.balance).to eq 0
@@ -15,8 +16,10 @@ describe Oystercard do
       expect(subject.balance).to eq 10
     end
 
-    it 'balance cannot exceed £90' do
-      expect { subject.top_up(100) }.to raise_error "Cannot exceed limit of £90"
+    it 'balance cannot exceed card limit' do
+      subject.top_up(card_limit)
+
+      expect { subject.top_up(1) }.to raise_error "Cannot exceed limit of £#{card_limit}"
     end
   
   end
