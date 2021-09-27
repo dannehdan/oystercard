@@ -57,6 +57,13 @@ describe Oystercard do
 
   describe '#touch_out' do
     it { is_expected.to respond_to(:touch_out)}
+
+    it 'causes card to be not in use' do
+      subject.touch_in
+      subject.touch_out
+
+      expect(subject).not_to be_in_journey
+    end
   end
 
 end
