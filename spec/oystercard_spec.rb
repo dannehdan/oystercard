@@ -61,7 +61,7 @@ describe Oystercard do
 
       it 'errors if balance is below minimum amount' do
         subject.deduct(card_limit)
-        expect { subject.touch_in }.to raise_error "Not enough money for journey"
+        expect { subject.touch_in }.to raise_error "Insufficient funds for journey"
       end
     end
 
