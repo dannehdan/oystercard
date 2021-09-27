@@ -45,24 +45,35 @@ describe Oystercard do
     it { is_expected.to respond_to(:in_journey?)}
   end
 
-  describe '#touch_in' do
-    it { is_expected.to respond_to(:touch_in)}
-
-    it 'causes card to be in use' do
-      subject.touch_in
-
-      expect(subject).to be_in_journey
+  describe 'touching in and out' do
+    before(:each) do
+      subject.top_up(card_limit)
     end
-  end
 
-  describe '#touch_out' do
-    it { is_expected.to respond_to(:touch_out)}
+    describe '#touch_in' do
+      it { is_expected.to respond_to(:touch_in)}
 
-    it 'causes card to be not in use' do
-      subject.touch_in
-      subject.touch_out
+      it 'causes card to be in use' do
+        subject.touch_in
 
-      expect(subject).not_to be_in_journey
+        expect(subject).to be_in_journey
+      end
+
+      it 'errors if balance is below minimum amount' do
+        subject.deduct(card_limit)
+        expect { subject.touch_in }.to raise_error "Not enough money for journey"
+      end
+    end
+
+    describe '#touch_out' do
+      it { is_expected.to respond_to(:touch_out)}
+
+      it 'causes card to be not in use' do
+        subject.touch_in
+        subject.touch_out
+
+        expect(subject).not_to be_in_journey
+      end
     end
   end
 
