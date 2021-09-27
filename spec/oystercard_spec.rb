@@ -26,5 +26,12 @@ describe Oystercard do
 
   describe '#deduct' do
     it { is_expected.to respond_to(:deduct).with(1).argument }
+
+    it 'deducts oystercard by £10' do
+      subject.top_up(20)
+
+      expect(subject.deduct(10)).to eq 10
+    end
   end 
+
 end
