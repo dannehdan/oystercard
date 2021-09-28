@@ -22,19 +22,23 @@ class Oystercard
   def touch_in(entry_station)
     fail "Insufficient funds for journey" if @balance < MIN_AMOUNT
     @entry_station = entry_station
-    @trip_history[:entry_station] = entry_station
+    add_trip_to_history("entry", entry_station)
   end
   
   def touch_out(exit_station)
     deduct(MIN_AMOUNT)
     @entry_station = nil
-    @trip_history[:exit_station] = exit_station
+    add_trip_to_history("exit", exit_station)
   end
   
   private
   
   def deduct(amount)
     @balance -= amount
+  end
+
+  def add_trip_to_history(in_out, station)
+    @trip_history[in_out.to_sym] = station
   end
 
 end
