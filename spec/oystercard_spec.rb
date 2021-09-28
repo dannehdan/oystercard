@@ -12,7 +12,7 @@ describe Oystercard do
     describe '#initialize' do
     it 'new oystercard starts with £0 balance and is not in use' do
       expect(subject.balance).to eq 0
-      expect(subject.in_use).to be_nil
+      expect(subject.entry_station).to be_nil
     end
 
   end
@@ -41,7 +41,6 @@ describe Oystercard do
 
       it 'causes card to be in use' do
         subject.touch_in(station)
-
         expect(subject).to be_in_journey
       end
 
