@@ -2,9 +2,9 @@ require './lib/oystercard'
 
 describe Oystercard do
   let(:card_limit) { Oystercard::CARD_LIMIT }
+  let(:min_amount) { Oystercard::MIN_AMOUNT }
   
   it { is_expected.to respond_to(:top_up).with(1).argument }
-  it { is_expected.to respond_to(:deduct).with(1).argument }
   it { is_expected.to respond_to(:touch_in)}
   it { is_expected.to respond_to(:touch_out)}
   it { is_expected.to respond_to(:in_journey?)}
@@ -30,14 +30,6 @@ describe Oystercard do
   
   end
 
-  describe '#deduct' do
-    it 'deducts oystercard by £10' do
-      subject.top_up(20)
-
-      expect(subject.deduct(10)).to eq 10
-    end
-  end 
-
   describe 'touching in and out' do
     before(:each) do
       subject.top_up(card_limit)
@@ -51,7 +43,7 @@ describe Oystercard do
       end
 
       it 'errors if balance is below minimum amount' do
-        subject.deduct(card_limit)
+        card_limit.times { subject.touch_out }
         expect { subject.touch_in }.to raise_error "Insufficient funds for journey"
       end
     end
@@ -62,6 +54,12 @@ describe Oystercard do
         subject.touch_out
 
         expect(subject).not_to be_in_journey
+      end
+
+      it 'deducts money from card on touch out' do
+        subject.touch_in
+        
+        expect { subject.touch_out }.to change{ subject.balance }.by(-min_amount)
       end
     end
   end
