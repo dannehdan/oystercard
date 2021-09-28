@@ -35,29 +35,37 @@ describe Oystercard do
       subject.top_up(card_limit)
     end
 
+    let(:station) { double :station }
+    
     describe '#touch_in' do
+
       it 'causes card to be in use' do
-        subject.touch_in
+        subject.touch_in(station)
 
         expect(subject).to be_in_journey
       end
 
       it 'errors if balance is below minimum amount' do
         card_limit.times { subject.touch_out }
-        expect { subject.touch_in }.to raise_error "Insufficient funds for journey"
+        expect { subject.touch_in(station) }.to raise_error "Insufficient funds for journey"
+      end
+
+      it 'remembers entry station after touch in' do
+        subject.touch_in(station)
+        expect(subject.entry_station).to eq station
       end
     end
 
     describe '#touch_out' do
       it 'causes card to be not in use' do
-        subject.touch_in
+        subject.touch_in(station)
         subject.touch_out
 
         expect(subject).not_to be_in_journey
       end
 
       it 'deducts money from card on touch out' do
-        subject.touch_in
+        subject.touch_in(station)
         
         expect { subject.touch_out }.to change{ subject.balance }.by(-min_amount)
       end
