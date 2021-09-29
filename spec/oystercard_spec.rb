@@ -4,6 +4,7 @@ require './lib/journey'
 describe Oystercard do
   let(:card_limit) { Oystercard::CARD_LIMIT }
   let(:min_amount) { Oystercard::MIN_AMOUNT }
+  let(:penalty_fare) { Journey::PENALTY_FARE }
 
   let(:entry_station) { double :entry_station }
   let(:exit_station) { double :exit_station }
@@ -49,6 +50,10 @@ describe Oystercard do
         expect(subject).to be_in_journey
       end
 
+      it 'fines card if they touch in twice in a row' do
+        subject.touch_in(entry_station)
+        expect{ subject.touch_in(entry_station) }.to change { subject.balance }.by (-penalty_fare) 
+      end
     end
 
     describe '#touch_out' do
@@ -62,6 +67,10 @@ describe Oystercard do
       it 'deducts money from card on touch out' do
         subject.touch_in(entry_station)
         expect { subject.touch_out(exit_station) }.to change { subject.balance }.by(-min_amount)
+      end
+
+      it 'fines the card if it no touch in' do
+        expect { subject.touch_out(exit_station) }.to change { subject.balance }.by(-penalty_fare)
       end
     end
 

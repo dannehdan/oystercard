@@ -20,4 +20,15 @@ describe Journey do
 
     expect(subject.completed_journey).to eq( {entry: entry_station, exit: exit_station} )
   end
+
+  # it 'returns a no tap out journey' do
+  #   subject.entry(entry_station)
+  #   subject.exit("No tap out")
+
+  #   expect(subject.completed_journey).to eq( {})
+
+  it 'returns a fare' do
+    expect(subject.fare).to eq 1
+  end
+
 end

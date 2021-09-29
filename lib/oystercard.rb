@@ -23,17 +23,26 @@ class Oystercard
   end
 
   def touch_in(current_journey = Journey.new, entry_station)
+    if in_journey?
+      @balance -= @current_journey.fare(true)
+      @trip_history << @current_journey.completed_journey
+    end
     raise "Insufficient funds for journey" if @balance < MIN_AMOUNT
     @current_journey = current_journey
     @in_journey = true
     @current_journey.entry(entry_station)
-
-
   end
 
   def touch_out(exit_station)
-    deduct(MIN_AMOUNT)
-    @current_journey.exit(exit_station)
+    if in_journey?
+      deduct(@current_journey.fare)
+      @current_journey.exit(exit_station)
+    else
+      @current_journey = Journey.new
+      @current_journey.entry("No touch in")
+      @current_journey.exit(exit_station)
+      deduct(@current_journey.fare(true))
+    end
     @in_journey = false
     @trip_history << @current_journey.completed_journey
   end

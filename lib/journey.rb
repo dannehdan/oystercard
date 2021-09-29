@@ -1,7 +1,5 @@
 class Journey
-  def exists
-    true
-  end
+  PENALTY_FARE = 6
 
   attr_reader :entry_station, :exit_station, :trip_history
 
@@ -20,6 +18,11 @@ class Journey
 
   def completed_journey
     {entry: @entry_station, exit: @exit_station}
+  end
+
+  def fare(penalty = false)
+    @exit_station = "No tap out" if penalty
+    penalty ? PENALTY_FARE : 1
   end
 
 end
