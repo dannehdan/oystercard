@@ -71,7 +71,7 @@ describe Oystercard do
       it 'stores a single journey' do
         subject.touch_in(entry_station)
         subject.touch_out(exit_station)
-        expect(subject.trip_history).to eq({ entry: entry_station, exit: exit_station })
+        expect(subject.trip_history).to eq([{ entry: entry_station, exit: exit_station }])
       end
     end
   end

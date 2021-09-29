@@ -8,11 +8,12 @@ class Oystercard
 
   def initialize
     @balance = 0
-    @trip_history = {}
+    @trip_history = []
+    @entry_station = nil
   end
 
   def top_up(amount)
-    raise "Cannot exceed limit of £#{CARD_LIMIT}" if (balance + amount) > CARD_LIMIT
+    raise "Cannot exceed limit of £#{CARD_LIMIT}" if (@balance + amount) > CARD_LIMIT
 
     @balance += amount
   end
@@ -25,13 +26,12 @@ class Oystercard
     raise "Insufficient funds for journey" if @balance < MIN_AMOUNT
 
     @entry_station = entry_station
-    add_trip_to_history("entry", entry_station)
   end
 
   def touch_out(exit_station)
     deduct(MIN_AMOUNT)
+    add_trip_to_history(exit_station)
     @entry_station = nil
-    add_trip_to_history("exit", exit_station)
   end
 
   private
@@ -40,7 +40,17 @@ class Oystercard
     @balance -= amount
   end
 
-  def add_trip_to_history(in_out, station)
-    @trip_history[in_out.to_sym] = station
+  def add_trip_to_history(exit_station)
+    @trip_history << {entry: @entry_station, exit: exit_station}
   end
 end
+
+oyster1 = Oystercard.new
+# oyster1.top_up(50)
+# oyster1.touch_in('kgx')
+# oyster1.touch_out('ofx')
+# oyster1.touch_in('waterloo')
+# oyster1.touch_in('kengsington')
+# oyster1.touch_out('bakerloo')
+
+# p oyster1.trip_history
