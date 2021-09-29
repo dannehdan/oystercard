@@ -6,6 +6,6 @@ RSpec.describe JourneyLog do
   end
 
   it 'has an array as a log' do
-    expect(subject.log).to eq []
+    expect(subject.trip_history).to eq []
   end
 end
