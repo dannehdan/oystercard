@@ -3,26 +3,30 @@ class Journey
 
   attr_reader :entry_station, :exit_station, :trip_history
 
-  def initialize
-    @entry_station = nil
-    @exit_station = nil
+  def initialize(entry_station = nil)
+    @entry_station = entry_station
+    @complete = false
   end
 
-  def start(station)
-    @entry_station = station
+  # def start(station)
+  #   @entry_station = station
+  # end
+
+  def finish(exit_station = nil)
+    @exit_station = exit_station
+    @complete = true if @entry_station
   end
 
-  def finish(station)
-    @exit_station = station
+  def complete?
+    @complete
   end
 
   def completed_journey
     {start: @entry_station, finish: @exit_station}
   end
 
-  def fare(penalty = false)
-    @exit_station = "No tap out" if penalty
-    penalty ? PENALTY_FARE : 1
+  def fare
+    @complete == false ? PENALTY_FARE : 1
   end
 
 end
