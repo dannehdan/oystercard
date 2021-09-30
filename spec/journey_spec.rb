@@ -5,20 +5,20 @@ describe Journey do
   let(:exit_station) { double :exit_station }
 
   it 'has an entry station' do
-    subject.entry(entry_station)
+    subject.start(entry_station)
     expect(subject.entry_station).to eq(entry_station)
   end
 
   it 'has an exit station' do
-    subject.exit(exit_station)
+    subject.finish(exit_station)
     expect(subject.exit_station).to eq(exit_station)
   end
 
   it 'returns a complete journey' do
-    subject.entry(entry_station)
-    subject.exit(exit_station)
+    subject.start(entry_station)
+    subject.finish(exit_station)
 
-    expect(subject.completed_journey).to eq( {entry: entry_station, exit: exit_station} )
+    expect(subject.completed_journey).to eq( {start: entry_station, finish: exit_station} )
   end
 
   # it 'returns a no tap out journey' do

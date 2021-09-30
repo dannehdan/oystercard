@@ -8,16 +8,16 @@ class Journey
     @exit_station = nil
   end
 
-  def entry(station)
+  def start(station)
     @entry_station = station
   end
 
-  def exit(station)
+  def finish(station)
     @exit_station = station
   end
 
   def completed_journey
-    {entry: @entry_station, exit: @exit_station}
+    {start: @entry_station, finish: @exit_station}
   end
 
   def fare(penalty = false)
