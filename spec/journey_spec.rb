@@ -20,9 +20,14 @@ describe Journey do
     expect(journey.completed_journey).to eq( {start: entry_station, finish: exit_station} )
   end
 
-  it 'returns a fare' do
-    journey.finish(exit_station)
-    expect(journey.fare).to eq 1
-  end
+  describe '#fare' do
+    it 'returns a fare' do
+      journey.finish(exit_station)
+      expect(journey.fare).to eq 1
+    end
 
+    it 'returns a penalty if journey is incomplete' do
+      expect(subject.fare).to eq Journey::PENALTY_FARE
+    end
+  end
 end
